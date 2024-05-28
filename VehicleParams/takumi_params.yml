@@ -1,0 +1,41 @@
+#-------Vehicle Parameters for Stanford's own autonomous drift car: Takumi----------
+m_kilog: 1496.0
+iz_m2kilog: 2241.0
+
+a_m: 1.217
+b_m: 1.231
+
+track_f_m: 1.80
+track_r_m: 1.60
+
+hcm_m: 0.45
+tire_radius_m: 0.32
+J_m2kilog: 15.0
+
+brake_f_frac: 0.5
+brake_r_frac: 0.5
+
+drive_f_frac: 0.0
+drive_r_frac: 1.0
+
+cda_1pm2: 0.594
+
+steer_ratio_none: 1.0
+max_delta_deg: 42.0
+max_ddelta_degps: 90.0
+max_dtau_kilonmps: 2.0
+min_dtau_kilonmps: -4.0
+max_tau_kilonm: 3.5
+min_tau_kilonm: -1.0
+max_power_kilonmps: 310.0
+max_fx_n: 10000.0
+
+cd0_n: 0.0
+cd1_npmps: 0.0
+cd2_npm2ps2: 0.0
+
+gamma_wt_none: 0.65
+tau_eff_none: 0.8 
+
+#Tire Parameters:
+c_stiffness_n_p_rad: 82845.0
