@@ -71,9 +71,7 @@ class Model:
         return jnp.array([d_ux, d_uy, d_r])
     
     def get_state_deriv_func(self):
-        """
-            Returns a JIT'd pure function that computes state derivatives of vehicle
-        """
+        #Returns JIT'd function that computes state derivatives
         @jax.jit
         def state_deriv(vehicle_state, control_inputs):
             delta_f, fxf, fxr, delta_r = control_inputs
