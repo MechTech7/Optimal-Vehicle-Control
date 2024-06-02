@@ -5,6 +5,7 @@ import jax.numpy as jnp
 
 #TODO: Make model more JAX-esque
 #       - Remove "Model" class and create a larget "generator" function that returns a JIT'd state derivative function
+jax.config.update('jax_platform_name', 'cpu')
 
 def slip_cond(alpha_f, _, mu, fz_front):
     return -1.0 * fz_front * mu * jnp.sign(alpha_f)
@@ -38,6 +39,7 @@ class Model:
         return fzf, fzr
     
     def state_derivative(self, vehicle_state, control_inputs):
+        #TODO: Remove this function as its been made obsolete by JIT function
         delta_f, fxf, fxr, delta_r = control_inputs
         ux, uy, r = vehicle_state
         a = self.vehicle_params["a_m"]

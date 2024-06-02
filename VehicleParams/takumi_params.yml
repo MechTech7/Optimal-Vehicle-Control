@@ -30,6 +30,8 @@ min_tau_kilonm: -1.0
 max_power_kilonmps: 310.0
 max_fx_n: 10000.0
 
+wheel_rad_m: 0.32
+
 cd0_n: 0.0
 cd1_npmps: 0.0
 cd2_npm2ps2: 0.0

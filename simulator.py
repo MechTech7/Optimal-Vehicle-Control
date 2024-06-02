@@ -207,6 +207,7 @@ def generate_reference_trajectory(veh_model, rollout_horizon_m):
     plot_veh_states(veh_acc_traj, ref_sim.ds)
     plot_veh_controls(controls_traj, ref_sim.ds)
 
+    #NOTE: There is an error here: we are sampling path curviture in dt rather than ds
     phi_ref, phi_ref_deriv, kappa_ref, s_deriv = ref_sim.positions_to_reference_trajectory(world_pos_traj, xy_vels, xy_accs, ref_sim.dt)
 
     return phi_ref, phi_ref_deriv, kappa_ref, world_pos_traj, xy_vels, s_deriv
