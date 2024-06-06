@@ -17,8 +17,9 @@ import scp_solver
 
 
 #STEPS:
-# 1. Dynamics: Double Integrator, Objective: Single Goal State, Dynamics Integration: Euler, Problem Integration: Euler
-# 2. Dynamics: Double Integrator, Objective: Single Goal State, Dynamics Integration: Runge-Kutta, Problem Integration: Euler
+# 1. Dynamics: Double Integrator, Objective: Single Goal State, Dynamics Integration: Euler, Problem Integration: Euler (Works)
+# 2. Dynamics: Double Integrator, Objective: Single Goal State, Dynamics Integration: Runge-Kutta, Problem Integration: Euler (Works)
+
 # 3. Dynamics: Double Integrator, Objective: Path-Fixed Coordinates Path, Dynamics Integration: Euler, Problem Integration: Euler
 # 4. Dynamics: Double Integrator, Objective: Path-Fixed Coordinates Path, Dynamics Integration: Euler, Problem Integration: Euler
 
@@ -35,14 +36,14 @@ def double_integrator_dynamics(s, u):
 
 def euler_integrated_states(f, dt):
     # Defines first order euler integration function for given dynamics
-    def integrated_next_state(s, u):
+    def integrated_next_state(s, u, _):
         return s + f(s, u) * dt
     
     return integrated_next_state
 
 def runge_kutta_integrated_states(f, dt):
     # Defines classic runge-kutta integration (as used in hw2) for given dynamics
-    def integrated_next_state(s, u):
+    def integrated_next_state(s, u, _):
         k1 = dt * f(s, u)
         k2 = dt * f(s + k1 / 2, u)
         k3 = dt * f(s + k2 / 2, u)
@@ -59,11 +60,10 @@ def plot_trajectory(s_traj, goal_state, name="di_opt_trajectory"):
 
 def main():
     dt = 0.1
-    di_dyn_func = euler_integrated_states(double_integrator_dynamics, dt)
+    di_dyn_func =runge_kutta_integrated_states(double_integrator_dynamics, dt) #euler_integrated_states(double_integrator_dynamics, dt)
 
+    initial_state = np.array([0., 0., 0.0, 0.0])
     goal_state = np.array([1., 1., 0., 0.])
-    initial_state = np.array([0., 0., 0., 0.])
-
     control_limits = (np.array([-1., -1.]), np.array([1., 1.]))
 
     n = 4
@@ -73,9 +73,9 @@ def main():
     P = 10 * Q
     R = np.eye(m)
 
-    N = 20
+    N = 45
     costs_at_iters, s_opt, u_opt = scp_solver.scp_solve(di_dyn_func, initial_state, control_limits, goal_state,
-                                                        P, Q, R, dt, N)
+                                                        P, Q, R, dt, N, max_iterations=3)
     
 
     plot_trajectory(s_opt, goal_state)

@@ -110,6 +110,21 @@ class Model:
         
         return state_deriv
 
+    def state_deriv_delta_fxr_control(self):
+        full_state_deriv_func = self.get_state_deriv_func()
+
+        @jax.jit
+        def state_deriv(vehicle_state, truncated_control):
+            # state: [ux, uy, r]
+            # control: [delta_f, fx_r]
+            delta_f, fx_r = truncated_control
+
+            full_control = jnp.array([delta_f, 0., fx_r, 0.])
+            
+            state_deriv = full_state_deriv_func(vehicle_state, full_control)
+            return state_deriv
+
+        return state_deriv
     #Calculate Front Tire Forces Using Fiala Model
     def fy_fiala(self, fz_front, alpha_f):
         c_stiff = self.vehicle_params["c_stiffness_n_p_rad"]
@@ -119,10 +134,14 @@ class Model:
         # To make function compatible with JAX operations (such as jit) 
         # we replace traditional Python branching with jax.lax.cond
         
-        f_out = jax.lax.cond(jnp.abs(alpha_f) >= thresh_alpha,
-                     slip_cond,
-                     linear_cond,
-                     alpha_f, c_stiff, mu, fz_front, #operands to functions
-                     )
+        f_out = -1.0 * fz_front * mu * c_stiff * alpha_f
+
+        #NOTE: Full Fiala model does not work well with the system
+        
+        # f_out = jax.lax.cond(jnp.abs(alpha_f) >= thresh_alpha,
+        #              slip_cond,
+        #              linear_cond,
+        #              alpha_f, c_stiff, mu, fz_front, #operands to functions
+        #              )
         return f_out
 
